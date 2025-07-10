@@ -1,0 +1,447 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Login | Register | Forgot Password</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="container">
+     Login Form -->
+    <!-- <form id="loginForm" class="form active">
+      <h2>Login</h2>
+      <input id="username" type="text" placeholder="Username" required />
+      <input id="password" type="password" placeholder="Password" required />
+
+      <div class="captcha-box">
+        <span id="captchaText"></span>
+        <button type="button" onclick="generateCaptcha()">↻</button>
+      </div>
+      <input id="captchaInput" type="text" placeholder="Enter Captcha" required />
+
+      <button type="submit">Login</button>
+      <p><a href="#" onclick="showForm('forgot')">Forgot Password?</a></p>
+      <p><a href="#" onclick="showForm('register')">New User? Register</a></p>
+    </form>
+
+     Forgot Password -->
+    <!-- <form id="forgotStep2" class="form">
+      <h2>Reset Password</h2>
+      <input type="text" placeholder="Enter OTP" required />
+      <input type="password" placeholder="New Password" required />
+      <input type="password" placeholder="Confirm Password" required />
+      <button type="submit">Reset Password</button>
+      <p><a href="#" onclick="showForm('login')">Back to Login</a></p>
+    </form>
+
+    Register Form
+    <form id="registerForm" class="form">
+      <h2>Register</h2>
+      <input type="text" placeholder="Full Name" required />
+      <input type="text" placeholder="Username" required />
+      <input type="text" placeholder="Mobile Number" required />
+      <button type="button" onclick="showOTP()">Send OTP</button>
+      <div id="otpSection" style="display:none;">
+        <input type="text" placeholder="Enter OTP" required />
+        <input type="password" placeholder="Set Password" required />
+        <input type="password" placeholder="Confirm Password" required />
+        <button type="submit">Register</button>
+      </div>
+      <p><a href="#" onclick="showForm('login')">Back to Login</a></p>
+    </form>
+  </div>  -->
+
+  <!-- <script>
+    function showForm(formId) {
+      document.querySelectorAll('.form').forEach(f => f.classList.remove('active'));
+      if (formId === 'forgot') {
+        document.getElementById('forgotStep2').classList.add('active');
+      } else if (formId === 'register') {
+        document.getElementById('registerForm').classList.add('active');
+      } else {
+        document.getElementById('loginForm').classList.add('active');
+        generateCaptcha(); // regenerate captcha
+      }
+    }
+
+    function showOTP() {
+      document.getElementById('otpSection').style.display = 'block';
+    }
+
+    function generateCaptcha() {
+      const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+      let captcha = '';
+      for (let i = 0; i < 6; i++) {
+        captcha += chars[Math.floor(Math.random() * chars.length)];
+      }
+      document.getElementById('captchaText').textContent = captcha;
+    }
+
+    // Generate captcha on load
+    generateCaptcha();
+
+    // Handle login form submission
+    document.getElementById("loginForm").addEventListener("submit", function (e) {
+      e.preventDefault();
+      // Replace with actual login validation
+      window.location.href = "dashboard.html";
+    });
+
+    // Show correct form on page load based on URL hash
+    window.addEventListener("DOMContentLoaded", () => {
+      const hash = window.location.hash;
+      if (hash === "#register") {
+        showForm('register');
+      } else {
+        showForm('login');
+      }
+    });
+  </script> -->
+
+
+  
+  
+   <!-- <script>
+let sessionId = null;
+
+function showForm(formId) {
+  document.querySelectorAll('.form').forEach(f => f.classList.remove('active'));
+  if (formId === 'forgot') {
+    document.getElementById('forgotStep2').classList.add('active');
+  } else if (formId === 'register') {
+    document.getElementById('registerForm').classList.add('active');
+  } else {
+    document.getElementById('loginForm').classList.add('active');
+    generateCaptcha(); // regenerate captcha
+  }
+}
+
+function generateCaptcha() {
+  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+  let captcha = '';
+  for (let i = 0; i < 6; i++) {
+    captcha += chars[Math.floor(Math.random() * chars.length)];
+  }
+  document.getElementById('captchaText').textContent = captcha;
+}
+
+generateCaptcha();
+
+// ✅ Show correct form on load
+window.addEventListener("DOMContentLoaded", () => {
+  const hash = window.location.hash;
+  if (hash === "#register") {
+    showForm('register');
+  } else {
+    showForm('login');
+  }
+});
+
+// ✅ Login logic
+document.getElementById("loginForm").addEventListener("submit", function (e) {
+  e.preventDefault();
+  const username = document.getElementById("username").value;
+  const password = document.getElementById("password").value;
+  const captchaInput = document.getElementById("captchaInput").value;
+  const actualCaptcha = document.getElementById("captchaText").textContent;
+
+  if (captchaInput !== actualCaptcha) {
+    alert("Captcha does not match!");
+    generateCaptcha();
+    return;
+  }
+
+  fetch("http://localhost:5000/auth/login", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ username, password })
+  })
+    .then(res => {
+      if (!res.ok) throw new Error("Invalid login");
+      return res.json();
+    })
+    .then(data => {
+      localStorage.setItem("token", data.token);
+      alert("Login successful!");
+      window.location.href = "dashboard.html";
+    })
+    .catch(err => alert("Login failed: " + err.message));
+});
+
+// ✅ Send OTP
+function sendOTP() {
+  const phoneNumber = document.getElementById("regPhone").value;
+
+  if (!phoneNumber || phoneNumber.length !== 10) {
+    alert("Enter a valid 10-digit phone number.");
+    return;
+  }
+
+  fetch("http://localhost:5000/send-otp", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ phoneNumber })
+  })
+    .then(res => res.json())
+    .then(data => {
+      if (data.success) {
+        alert("OTP sent!");
+        sessionId = data.sessionId;
+        document.getElementById("otpSection").style.display = "block";
+      } else {
+        alert("OTP failed: " + data.message);
+      }
+    })
+    .catch(err => {
+      console.error("OTP error:", err);
+      alert("Something went wrong.");
+    });
+}
+
+// ✅ Register form submission
+document.getElementById("registerForm").addEventListener("submit", function (e) {
+  e.preventDefault();
+
+  const name = document.getElementById("regName").value;
+  const username = document.getElementById("regUsername").value;
+  const phoneNumber = document.getElementById("regPhone").value;
+  const otp = document.getElementById("otpInput").value;
+  const password = document.getElementById("regPassword").value;
+  const confirmPassword = document.getElementById("regConfirmPassword").value;
+
+  if (password !== confirmPassword) return alert("Passwords do not match.");
+  if (!otp || !sessionId) return alert("Please enter the OTP.");
+
+  // ✅ Verify OTP first
+  fetch("http://localhost:5000/verify-otp", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ phoneNumber, otp, sessionId })
+  })
+    .then(res => res.json())
+    .then(data => {
+      if (!data.success) throw new Error(data.message);
+
+      // ✅ Now register the user
+      return fetch("http://localhost:5000/auth/signup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, username, phoneNumber, password })
+      });
+    })
+    .then(res => res.json())
+    .then(data => {
+      alert("Registration successful!");
+      showForm('login');
+    })
+    .catch(err => alert("Registration failed: " + err.message));
+});
+</script>
+
+
+</body>
+</html> -->
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Login | Register | Forgot Password</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="container">
+    <!-- Login Form -->
+    <form id="loginForm" class="form active">
+      <h2>Login</h2>
+      <input id="username" type="text" placeholder="Username" required />
+      <input id="password" type="password" placeholder="Password" required />
+      <div class="captcha-box">
+        <span id="captchaText"></span>
+        <button type="button" onclick="generateCaptcha()">↻</button>
+      </div>
+      <input id="captchaInput" type="text" placeholder="Enter Captcha" required />
+      <button type="submit">Login</button>
+      <p><a href="#" onclick="showForm('forgot')">Forgot Password?</a></p>
+      <p><a href="#" onclick="showForm('register')">New User? Register</a></p>
+    </form>
+
+    <!-- Forgot Password (Future Use) -->
+    <form id="forgotStep2" class="form">
+      <h2>Reset Password</h2>
+      <input type="text" placeholder="Enter OTP" required />
+      <input type="password" placeholder="New Password" required />
+      <input type="password" placeholder="Confirm Password" required />
+      <button type="submit">Reset Password</button>
+      <p><a href="#" onclick="showForm('login')">Back to Login</a></p>
+    </form>
+
+    <!-- Register Form -->
+    <form id="registerForm" class="form">
+      <h2>Register</h2>
+      <input type="text" id="regName" placeholder="Full Name" required />
+      <input type="text" id="regUsername" placeholder="Username" required />
+      <input type="text" id="regPhone" placeholder="Mobile Number" required />
+      <button type="button" id="sendOtpBtn">Send OTP</button>
+
+      <div id="otpSection" style="display:none;">
+        <input type="text" id="otpInput" placeholder="Enter OTP" required />
+        <input type="password" id="regPassword" placeholder="Set Password" required />
+        <input type="password" id="regConfirmPassword" placeholder="Confirm Password" required />
+        <button type="submit">Register</button>
+      </div>
+      <p><a href="#" onclick="showForm('login')">Back to Login</a></p>
+    </form>
+  </div>
+
+  <script>
+    let sessionId = null;
+
+    function showForm(formId) {
+      document.querySelectorAll('.form').forEach(f => f.classList.remove('active'));
+      if (formId === 'forgot') {
+        document.getElementById('forgotStep2').classList.add('active');
+      } else if (formId === 'register') {
+        document.getElementById('registerForm').classList.add('active');
+      } else {
+        document.getElementById('loginForm').classList.add('active');
+        generateCaptcha(); // Regenerate on returning to login
+      }
+    }
+
+    function generateCaptcha() {
+      const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+      let captcha = '';
+      for (let i = 0; i < 6; i++) {
+        captcha += chars[Math.floor(Math.random() * chars.length)];
+      }
+      document.getElementById('captchaText').textContent = captcha;
+    }
+
+    // Initial captcha + form load
+    generateCaptcha();
+    window.addEventListener("DOMContentLoaded", () => {
+      const hash = window.location.hash;
+      if (hash === "#register") showForm('register');
+      else showForm('login');
+    });
+
+    // ✅ Login
+    document.getElementById("loginForm").addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      const username = document.getElementById("username").value;
+      const password = document.getElementById("password").value;
+      const enteredCaptcha = document.getElementById("captchaInput").value;
+      const actualCaptcha = document.getElementById("captchaText").textContent;
+
+      if (enteredCaptcha !== actualCaptcha) {
+        alert("Captcha does not match!");
+        generateCaptcha();
+        return;
+      }
+
+      fetch("http://localhost:5000/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, password })
+      })
+        .then(res => res.json())
+        .then(data => {
+           console.log("Login response from server:", data);
+          if (data.token) {
+            localStorage.setItem("token", data.token);
+            alert("Login successful!");
+            window.location.href = "dashboard.html";
+          } else {
+            alert("Login failed!");
+          }
+        })
+        .catch(err => alert("Login failed: " + err.message));
+    });
+
+    // ✅ Send OTP
+    document.getElementById("sendOtpBtn").addEventListener("click", () => {
+      const phoneNumber = document.getElementById("regPhone").value;
+
+      if (!phoneNumber || phoneNumber.length !== 10) {
+        alert("Enter a valid 10-digit mobile number.");
+        return;
+      }
+
+      fetch("http://localhost:5000/send-otp", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ phoneNumber })
+      })
+        .then(res => res.json())
+        .then(data => {
+          if (data.success) {
+            sessionId = data.sessionId;
+            document.getElementById("otpSection").style.display = "block";
+            alert("OTP sent successfully!");
+          } else {
+            alert("OTP send failed: " + data.message);
+          }
+        })
+        .catch(err => {
+          console.error("OTP send error:", err);
+          alert("Something went wrong while sending OTP.");
+        });
+    });
+
+    // ✅ Register
+    document.getElementById("registerForm").addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      const name = document.getElementById("regName").value;
+      const username = document.getElementById("regUsername").value;
+      const phoneNumber = document.getElementById("regPhone").value;
+      const otp = document.getElementById("otpInput").value;
+      const password = document.getElementById("regPassword").value;
+      const confirmPassword = document.getElementById("regConfirmPassword").value;
+
+      if (password !== confirmPassword) {
+        alert("Passwords do not match.");
+        return;
+      }
+
+      if (!otp || !sessionId) {
+        alert("Please enter the OTP sent to your phone.");
+        return;
+      }
+
+      // Step 1: Verify OTP
+      fetch("http://localhost:5000/verify-otp", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ phoneNumber, otp, sessionId })
+      })
+        .then(res => res.json())
+        .then(data => {
+          if (!data.success) throw new Error(data.message);
+
+          // Step 2: Proceed with registration
+          return fetch("http://localhost:5000/auth/signup", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              name,
+              username,
+              phoneNumber,
+              password
+            })
+          });
+        })
+        .then(res => res.json())
+        .then(data => {
+          alert("Registration successful! Please login.");
+          showForm("login");
+        })
+        .catch(err => alert("Registration failed: " + err.message));
+    });
+  </script>
+</body>
+</html>

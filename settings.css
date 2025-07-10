@@ -1,0 +1,104 @@
+/* Base Styles */
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Poppins', sans-serif;
+  background: #f5f7fa;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.settings-page {
+  max-width: 800px;
+  margin: 40px auto;
+  padding: 30px;
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+}
+
+.settings-page h1 {
+  text-align: center;
+  color: #2c3e50;
+  margin-bottom: 40px;
+}
+
+section {
+  margin-bottom: 40px;
+}
+
+section h2 {
+  color: #007bff;
+  margin-bottom: 15px;
+  font-size: 20px;
+}
+
+form input[type="text"],
+form input[type="password"] {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 16px;
+  box-sizing: border-box;
+}
+
+form button,
+section button {
+  background-color: #007bff;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+}
+
+form button:hover,
+section button:hover {
+  background-color: #0056b3;
+}
+
+label {
+  font-size: 16px;
+  display: block;
+  margin-bottom: 10px;
+}
+
+input[type="checkbox"] {
+  margin-right: 10px;
+}
+
+/* Dark Mode */
+.dark-mode {
+  background-color: #121212;
+  color: #ffffff;
+}
+
+.dark-mode .settings-page {
+  background-color: #1e1e1e;
+  color: white;
+}
+
+.dark-mode input,
+.dark-mode button,
+.dark-mode textarea {
+  background-color: #333;
+  color: white;
+  border-color: #555;
+}
+
+.dark-mode input::placeholder {
+  color: #ccc;
+}
+
+.dark-mode form button,
+.dark-mode section button {
+  background-color: #0d6efd;
+}
+
+.dark-mode form button:hover,
+.dark-mode section button:hover {
+  background-color: #0a58ca;
+}

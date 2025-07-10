@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Settings | BhoomiSetu</title>
+  <link rel="stylesheet" href="settings.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <div class="settings-page">
+    <h1>User Settings</h1>
+
+    <!-- Profile Update -->
+    <section>
+      <h2>👤 Update Profile</h2>
+      <form onsubmit="event.preventDefault();">
+        <input type="text" id="fullName" placeholder="Full Name" required />
+        <input type="text" id="mobile" placeholder="Mobile Number" required />
+        <input type="text" id="aadhaar" placeholder="Aadhaar Number" required />
+      </form>
+    </section>
+
+    <!-- Password Update -->
+    <section>
+      <h2>🔐 Change Password</h2>
+      <form onsubmit="event.preventDefault();">
+        <input type="password" id="oldPassword" placeholder="Old Password" />
+        <input type="password" id="newPassword" placeholder="New Password" />
+        <input type="password" id="confirmPassword" placeholder="Confirm New Password" />
+      </form>
+    </section>
+
+    <!-- Notifications -->
+    <section>
+      <h2>🔔 Notification Preferences</h2>
+      <label><input type="checkbox" id="smsNotification" /> SMS Notifications</label><br />
+      <label><input type="checkbox" id="emailNotification" /> Email Updates</label>
+    </section>
+
+    <!-- Theme -->
+    <section>
+      <h2>🌗 Appearance</h2>
+      <label><input type="checkbox" onchange="toggleTheme()" id="darkToggle" /> Enable Dark Mode</label>
+    </section>
+
+    <!-- Logout -->
+    <section>
+      <h2>🚪 Logout</h2>
+      <button onclick="logout()">Logout</button>
+    </section>
+
+    <!-- Save All Settings -->
+    <section>
+      <h2>📂 Save All Settings</h2>
+      <button onclick="saveAllSettings()">Save All</button>
+    </section>
+  </div>
+
+  <script>
+    // Load theme on page load
+    window.addEventListener("DOMContentLoaded", () => {
+      const savedTheme = localStorage.getItem("theme");
+      if (savedTheme === "dark") {
+        document.body.classList.add("dark-mode");
+        document.getElementById("darkToggle").checked = true;
+      }
+    });
+
+    function toggleTheme() {
+      const isDark = document.getElementById("darkToggle").checked;
+      if (isDark) {
+        document.body.classList.add("dark-mode");
+        localStorage.setItem("theme", "dark");
+      } else {
+        document.body.classList.remove("dark-mode");
+        localStorage.setItem("theme", "light");
+      }
+    }
+
+    function logout() {
+      localStorage.removeItem("token");
+      alert("You have been logged out.");
+      window.location.href = "index.html";
+    }
+
+    async function saveAllSettings() {
+      const fullName = document.getElementById("fullName").value;
+      const mobile = document.getElementById("mobile").value;
+      const aadhaar = document.getElementById("aadhaar").value;
+
+      const oldPassword = document.getElementById("oldPassword").value;
+      const newPassword = document.getElementById("newPassword").value;
+      const confirmPassword = document.getElementById("confirmPassword").value;
+
+      const smsChecked = document.getElementById("smsNotification").checked;
+      const emailChecked = document.getElementById("emailNotification").checked;
+      const darkMode = document.getElementById("darkToggle").checked;
+
+      if (newPassword && newPassword !== confirmPassword) {
+        alert("❌ New password and confirmation do not match.");
+        return;
+      }
+
+      try {
+        const token = localStorage.getItem("token");
+
+        // const response = await fetch("/api/settings", {
+        const response = await fetch("http://localhost:5000/api/settings", {
+
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            fullName,
+            mobile,
+            aadhaar,
+            oldPassword,
+            newPassword,
+            notifications: {
+              sms: smsChecked,
+              email: emailChecked,
+            },
+            theme: darkMode ? "dark" : "light",
+          }),
+        });
+
+        // const contentType = response.headers.get("content-type");
+        // const data = contentType && contentType.includes("application/json")
+        //   ? await response.json()
+        //   : { message: "Server error or no response" };
+
+        let data = { message: "Server error or no response" };
+const contentType = response.headers.get("content-type") || "";
+if (contentType.includes("application/json")) {
+  try {
+    data = await response.json();
+  } catch (e) {
+    console.error("❌ Failed to parse JSON:", e);
+  }
+}
+
+
+        if (response.ok) {
+          alert("✅ Settings updated successfully!");
+        } else {
+          alert("❌ " + (data.message || "Failed to update settings"));
+        }
+      } catch (err) {
+        alert("❌ Failed to save settings: " + err.message);
+      }
+    }
+  </script>
+</body>
+</html>

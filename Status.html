@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Dashboard | Case Status</title>
+  <link rel="stylesheet" href="status.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <div class="dashboard-container">
+    <h1>Track Your Case Progress</h1>
+    <p>Click a status block to see more details.</p>
+
+    <!-- Progress Bar -->
+    <div class="progress-bar">
+      <div class="step active">Pending</div>
+      <div class="step">In Review</div>
+      <div class="step">Verification</div>
+      <div class="step">Resolved</div>
+      <div class="step">Rejected</div>
+    </div>
+
+    <!-- Status Cards -->
+    <div class="status-tracker">
+      <div class="status-card pending" onclick="showDetails('Pending')">
+        <span class="label">Pending</span>
+        <p>Your request is received.</p>
+      </div>
+      <div class="status-card in-review" onclick="showDetails('In Review')">
+        <span class="label">In Review</span>
+        <p>Currently being reviewed.</p>
+      </div>
+      <div class="status-card verifying" onclick="showDetails('Under Verification')">
+        <span class="label">Verification</span>
+        <p>Field team verifying documents.</p>
+      </div>
+      <div class="status-card resolved" onclick="showDetails('Resolved')">
+        <span class="label">Resolved</span>
+        <p>Successfully resolved.</p>
+      </div>
+      <div class="status-card rejected" onclick="showDetails('Rejected')">
+        <span class="label">Rejected</span>
+        <p>Case was rejected.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal for Detailed View -->
+  <div id="modal" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal()">&times;</span>
+      <h3 id="modalTitle">Status Details</h3>
+      <p id="modalBody">Detailed info here...</p>
+    </div>
+  </div>
+
+  <script src="dashboard.js"></script>
+</body>
+</html>

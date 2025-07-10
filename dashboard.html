@@ -1,0 +1,296 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Responsive Dashboard</title>
+  <link rel="stylesheet" href="dashboard.css">
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+</head>
+<body> -->
+  <!-- Hamburger Toggle Button -->
+  <!-- <button class="hamburger" onclick="toggleSidebar()">
+    <i class="fas fa-bars"></i>
+  </button> -->
+
+  <!-- <div class="dashboard-wrapper"> -->
+    <!-- Sidebar -->
+    <!-- <div class="sidebar" id="sidebar">
+      <div class="profile-section">
+        <label for="profileUpload">
+          <img id="profileImage" src="https://i.pravatar.cc/100" alt="User Profile">
+        </label>
+        <input type="file" id="profileUpload" accept="image/*" hidden>
+        <h3>Welcome, User</h3>
+      </div>
+      <div class="sidebar-item">
+        <i class="fas fa-user-circle"></i>
+        <a href="user-profile.html" class="menu-item">👤User profile</a>
+      </div>
+      <div class="sidebar-item">
+        <i class="fas fa-tasks"></i>
+        
+        <a href="status.html" class="menu-item">📊 Status</a>
+
+      </div>
+      <a href="setting.html" class="sidebar-item">
+  <i class="fas fa-cog"></i>
+  <span>⚙️Settings</span>
+</a>
+
+           <a href="feedback.html" class="sidebar-item">
+  <i class="fas fa-comment-dots"></i>
+  <span>💬Feedback</span>
+</a>
+
+      <a href="index.html" class="sidebar-item" onclick="logout()">
+  <i class="fas fa-sign-out-alt"></i>
+  <span>🚪 Logout</span>
+</a>
+
+    </div> -->
+
+    <!-- Main Content -->
+    <!-- <div class="dashboard-container">
+      <h1>User Dashboard</h1>
+      <div class="cards-container">
+        <div class="card">
+          <h2>Mutual Partition</h2>
+          <p>Request partition by mutual agreement.</p>
+          <a href="mutual-partition.html">Open</a>
+        </div>
+        <div class="card">
+          <h2>Family Partition</h2>
+          <p>Submit a family-based partition request.</p>
+          <a href="family-partiton.html">Open</a>
+        </div>
+        <div class="card">
+          <h2>Demarcation Request</h2>
+          <p>Request demarcation of your land.</p>
+          <a href="demarcation.html">Open</a>
+        </div>
+        <div class="card">
+          <h2>Coming Soon</h2>
+          <p>Feature under development.</p>
+          <a href="#">Details</a>
+        </div>
+      </div>
+    </div>
+  </div> -->
+
+  <!-- JavaScript -->
+  <!-- <script>
+    function toggleSidebar() {
+      document.getElementById('sidebar').classList.toggle('active');
+    } -->
+
+    <!-- // Profile image upload preview -->
+    <!-- const profileUpload = document.getElementById('profileUpload');
+    const profileImage = document.getElementById('profileImage');
+
+    profileUpload.addEventListener('change', function () {
+      const file = this.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function () {
+          profileImage.src = reader.result;
+        }
+        reader.readAsDataURL(file);
+      }
+    }); -->
+  <!-- </script>
+  <script>
+  function checkTheme() {
+    const savedTheme = localStorage.getItem("theme");
+    if (savedTheme === "dark") {
+      document.body.classList.add("dark-mode");
+    }
+  }
+
+  checkTheme(); // call on load
+</script>
+
+ 
+
+<script>
+  const token = localStorage.getItem("token");
+   console.log("Token in localStorage:", token);
+  // Call user info API to personalize dashboard
+  fetch("http://localhost:5000/auth/userinfo", {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  })
+    .then(res => {
+       console.log("Response status:", res.status);
+      if (!res.ok) throw new Error("Unauthorized");
+      return res.json();
+    })
+    .then(data => {
+      console.log("User data:", data); 
+      document.querySelector(".profile-section h3").textContent = "Welcome, " + data.name;
+    })
+    .catch(err => {
+       console.error("Fetch failed:", err.message); 
+      alert("Session expired or invalid. Please login again.");
+      localStorage.removeItem("token");
+      window.location.href = "index.html";
+    });
+</script>
+
+<script>
+  function logout() {
+    localStorage.removeItem("token");
+    // window.location.href = "index.html";
+  }
+</script>
+
+
+</body>
+ </html> -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Responsive Dashboard</title>
+
+  <!-- ✅ Updated FontAwesome 6 CDN -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+  <link rel="stylesheet" href="dashboard.css">
+</head>
+<body>
+  <!-- Hamburger Toggle Button -->
+  <button class="hamburger" onclick="toggleSidebar()">
+    <i class="fa-solid fa-bars"></i>
+  </button>
+
+  <div class="dashboard-wrapper">
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+      <div class="profile-section">
+        <label for="profileUpload">
+          <img id="profileImage" src="https://i.pravatar.cc/100" alt="User Profile">
+        </label>
+        <input type="file" id="profileUpload" accept="image/*" hidden>
+        <h3>Welcome, User</h3>
+      </div>
+      <div class="sidebar-item">
+        <i class="fa-solid fa-user-circle"></i>
+        <a href="user-profile.html" class="menu-item">👤User profile</a>
+      </div>
+      <div class="sidebar-item">
+        <i class="fa-solid fa-tasks"></i>
+        <a href="status.html" class="menu-item">📊 Status</a>
+      </div>
+      <a href="settings.html" class="sidebar-item">
+        <i class="fa-solid fa-gear"></i>
+        <span>⚙️Settings</span>
+      </a>
+      <a href="feedback.html" class="sidebar-item">
+        <i class="fa-solid fa-comment-dots"></i>
+        <span>💬Feedback</span>
+      </a>
+      <a href="index.html" class="sidebar-item" onclick="logout()">
+        <i class="fa-solid fa-right-from-bracket"></i>
+        <span>🚪 Logout</span>
+      </a>
+    </div>
+
+    <!-- Main Content -->
+    <div class="dashboard-container">
+      <h1>User Dashboard</h1>
+      <div class="cards-container">
+        <div class="card">
+          <h2>Mutual Partition</h2>
+          <p>Request partition by mutual agreement.</p>
+          <a href="mutual-partition.html">Open</a>
+        </div>
+        <div class="card">
+          <h2>Family Partition</h2>
+          <p>Submit a family-based partition request.</p>
+          <a href="family-partiton.html">Open</a>
+        </div>
+        <div class="card">
+          <h2>Demarcation Request</h2>
+          <p>Request demarcation of your land.</p>
+          <a href="demarcation.html">Open</a>
+        </div>
+        <div class="card">
+          <h2>Coming Soon</h2>
+          <p>Feature under development.</p>
+          <a href="#">Details</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- JavaScript -->
+  <script>
+    function toggleSidebar() {
+      document.getElementById('sidebar').classList.toggle('active');
+    }
+
+    // Profile image upload preview
+    const profileUpload = document.getElementById('profileUpload');
+    const profileImage = document.getElementById('profileImage');
+
+    profileUpload.addEventListener('change', function () {
+      const file = this.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function () {
+          profileImage.src = reader.result;
+        }
+        reader.readAsDataURL(file);
+      }
+    });
+  </script>
+
+  <script>
+    function checkTheme() {
+      const savedTheme = localStorage.getItem("theme");
+      if (savedTheme === "dark") {
+        document.body.classList.add("dark-mode");
+      }
+    }
+
+    checkTheme(); // call on load
+  </script>
+
+  <script>
+    const token = localStorage.getItem("token");
+    console.log("Token in localStorage:", token);
+
+    fetch("http://localhost:5000/auth/userinfo", {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
+    .then(res => {
+      console.log("Response status:", res.status);
+      if (!res.ok) throw new Error("Unauthorized");
+      return res.json();
+    })
+    .then(data => {
+      console.log("User data:", data);
+      document.querySelector(".profile-section h3").textContent = "Welcome, " + data.name;
+    })
+    .catch(err => {
+      console.error("Fetch failed:", err.message);
+      alert("Session expired or invalid. Please login again.");
+      localStorage.removeItem("token");
+      window.location.href = "index.html";
+    });
+  </script>
+
+  <script>
+    function logout() {
+      localStorage.removeItem("token");
+      window.location.href = "index.html";
+    }
+  </script>
+
+</body>
+</html>

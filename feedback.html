@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Feedback | LandResolve</title>
+  <link rel="stylesheet" href="feedback.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <div class="feedback-container">
+    <h1>We Value Your Feedback</h1>
+    <p>Your input helps us improve our services.</p>
+    <form id="feedbackForm">
+      <textarea placeholder="Write your feedback..." required></textarea>
+      <input type="email" placeholder="Your Email (optional)">
+      
+      <label>Rate us:</label>
+      <div class="stars">
+        <input type="radio" name="star" id="star5" value="5"><label for="star5">★</label>
+        <input type="radio" name="star" id="star4" value="4"><label for="star4">★</label>
+        <input type="radio" name="star" id="star3" value="3"><label for="star3">★</label>
+        <input type="radio" name="star" id="star2" value="2"><label for="star2">★</label>
+        <input type="radio" name="star" id="star1" value="1"><label for="star1">★</label>
+      </div>
+
+      <button type="submit">Submit Feedback</button>
+    </form>
+  </div>
+
+  <script>
+    document.getElementById("feedbackForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+      alert("✅ Thank you for your feedback!");
+      // Here you can add a fetch() call to send data to your backend
+      this.reset();
+    });
+  </script>
+</body>
+</html>
