@@ -173,7 +173,9 @@
           <img id="profileImage" src="https://i.pravatar.cc/100" alt="User Profile">
         </label>
         <input type="file" id="profileUpload" accept="image/*" hidden>
-        <h3>Welcome, User</h3>
+        <!-- <h3>Welcome, User</h3> -->
+         <h3 id="userName">Welcome, User</h3>
+
       </div>
       <div class="sidebar-item">
         <i class="fa-solid fa-user-circle"></i>
@@ -262,21 +264,35 @@
     const token = localStorage.getItem("token");
     console.log("Token in localStorage:", token);
 
-    fetch("http://localhost:5000/auth/userinfo", {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
-    })
-    .then(res => {
-      console.log("Response status:", res.status);
-      if (!res.ok) throw new Error("Unauthorized");
-      return res.json();
-    })
-    .then(data => {
-      console.log("User data:", data);
-      document.querySelector(".profile-section h3").textContent = "Welcome, " + data.name;
-    })
+//     fetch("http://localhost:5000/auth/userinfo", {
+//       method: "GET",
+//       headers: {
+//         Authorization: `Bearer ${token}`
+//       }
+//     })
+//     .then(res => {
+//       console.log("Response status:", res.status);
+//       if (!res.ok) throw new Error("Unauthorized");
+//       return res.json();
+//     })
+//     .then(data => {
+//       console.log("User data:", data);
+//       // document.querySelector(".profile-section h3").textContent = "Welcome, " + data.name;
+//       const welcomeName = data.fullName || data.username || "User";
+// document.querySelector(".profile-section h3").textContent = "Welcome, " + welcomeName;
+
+//     }).
+fetch("http://localhost:5000/auth/userinfo", {
+  method: "GET",
+  headers: {
+    Authorization: `Bearer ${token}`
+  }
+})
+.then(res => res.json())
+.then(data => {
+  const welcomeName = data.fullName || data.username || "User";
+  document.getElementById("userName").textContent = "Welcome, " + welcomeName;
+})
     .catch(err => {
       console.error("Fetch failed:", err.message);
       alert("Session expired or invalid. Please login again.");

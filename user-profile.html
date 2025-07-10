@@ -9,38 +9,76 @@
   <div class="profile-container">
     <h1>User Profile</h1>
 
-    <!-- Profile Image Upload -->
-    <div class="profile-image">
-      <img src="https://i.pravatar.cc/150?img=3" id="userImage" alt="Profile">
-     
-    </div>
-
-    <!-- Info Form -->
-    <form>
-      <input type="text" placeholder="Full Name" value="Shubh Kesharwani" required>
-      <input type="text" placeholder="Mobile Number" value="9876543210" required>
-      <input type="text" placeholder="Aadhaar Number" value="1234-5678-9012" readonly>
-      <input type="email" placeholder="Email (optional)" value="user@example.com">
-
-      
+    <!-- Profile Info Form -->
+    <form id="userForm">
+      <input type="text" id="fullName" placeholder="Full Name" required>
+      <input type="text" id="mobile" placeholder="Mobile Number" required>
+      <input type="text" id="aadhaar" placeholder="Aadhaar Number">
+      <input type="email" id="email" placeholder="Email (optional)">
+      <button type="button" onclick="updateProfile()">Save Changes</button>
     </form>
   </div>
 
   <script>
-    // Live image preview
-    const uploadInput = document.getElementById("uploadImage");
-    const userImage = document.getElementById("userImage");
+    const token = localStorage.getItem("token");
+    if (!token) {
+      alert("No session found. Please login.");
+      window.location.href = "index.html";
+    }
 
-    uploadInput.addEventListener("change", function () {
-      const file = this.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = function () {
-          userImage.src = reader.result;
-        };
-        reader.readAsDataURL(file);
+    // Fetch user data on page load
+    fetch("http://localhost:5000/users/me", {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`
       }
+    })
+    .then(res => {
+      if (!res.ok) throw new Error("Unauthorized");
+      return res.json();
+    })
+    .then(data => {
+      document.getElementById("fullName").value = data.fullName || "";
+      document.getElementById("mobile").value = data.mobile || "";
+      document.getElementById("aadhaar").value = data.aadhaar || "";
+      document.getElementById("email").value = data.email || "";
+    })
+    .catch(err => {
+      console.error("Fetch failed:", err.message);
+      alert("Session expired. Please login again.");
+      localStorage.removeItem("token");
+      window.location.href = "index.html";
     });
+
+    // Update user data
+    function updateProfile() {
+      const updatedUser = {
+        fullName: document.getElementById("fullName").value,
+        mobile: document.getElementById("mobile").value,
+        email: document.getElementById("email").value,
+         aadhaar: document.getElementById("aadhaar").value
+      };
+
+      fetch("http://localhost:5000/users/me", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify(updatedUser)
+      })
+      .then(res => {
+        if (!res.ok) throw new Error("Update failed");
+        return res.json();
+      })
+      .then(data => {
+        alert("Profile updated successfully!");
+      })
+      .catch(err => {
+        console.error("Update failed:", err.message);
+        alert("Could not update profile. Try again.");
+      });
+    }
   </script>
 </body>
 </html>
